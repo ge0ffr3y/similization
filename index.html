@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>CivSim</title>
+    <script type="module" crossorigin src="/similization/assets/index-1zB-i9nC.js"></script>
+    <link rel="stylesheet" crossorigin href="/similization/assets/index-Ci_iPuJH.css">
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>CivSim</h1>
+      <p>A world history machine. Nobody plays it: pick a seed, press play, and watch history write itself. (Phase 13: every world now ends: in conquest, cultural dominance, religious unity, world peace, extinction, or the time limit. Watch the race to the end below the controls and its chart, try the Cultural influence map mode, and read the epilogue when the world ends. Choose what happens after: stop, keep watching, or start a new world.)</p>
+    </header>
+
+    <main class="layout">
+      <section class="map-panel" aria-label="World map">
+        <div class="map-toolbar">
+          <span class="toolbar-left">
+            <label>Map mode <select id="map-mode"></select></label>
+            <label id="tech-pick" hidden>Technology <select id="tech-select"></select></label>
+            <label id="good-pick" hidden>Good <select id="good-select"></select></label>
+            <label class="checkbox"><input id="show-names" type="checkbox" checked /> Place names</label>
+          </span>
+          <span class="zoom-buttons">
+            <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+            <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+            <button id="zoom-fit" type="button">Fit</button>
+          </span>
+        </div>
+        <div class="map-frame">
+          <canvas id="map" aria-label="The world map. Drag to pan, scroll or pinch to zoom, click a tile to inspect it."></canvas>
+          <p id="past-badge" class="past-badge" hidden></p>
+        </div>
+        <div class="timelapse" aria-label="Timelapse">
+          <button id="tl-play" type="button" aria-label="Play the timelapse">▶</button>
+          <input id="tl-slider" type="range" min="0" max="0" step="100" value="0" aria-label="Year shown on the map" />
+          <span id="tl-year" class="tl-year">Now</span>
+          <button id="tl-now" type="button">Now</button>
+        </div>
+        <p id="mode-description" class="hint"></p>
+        <div id="legend" class="legend"></div>
+
+        <section id="epilogue" class="epilogue" aria-label="Epilogue" hidden></section>
+
+        <section class="chronicle-panel" aria-label="Chronicle">
+          <div class="chronicle-header">
+            <h2>Chronicle</h2>
+            <div class="filters">
+              <label>Kind <select id="filter-kind"><option value="">All kinds</option></select></label>
+              <label>People <select id="filter-culture"><option value="-1">All peoples</option></select></label>
+              <label>Region <select id="filter-region"><option value="-1">All regions</option></select></label>
+            </div>
+          </div>
+          <div class="timeline-frame">
+            <canvas id="timeline" aria-label="Timeline of the chronicle. Scroll to zoom, drag to pan, double-click to see everything, click a dot to jump to it."></canvas>
+            <div id="timeline-tip" class="timeline-tip" hidden></div>
+          </div>
+          <p class="hint">The timeline: one dot per line below, one row per kind. Scroll to zoom, drag to pan, double-click to see it all, click a dot to jump to it. Click a line to see where it happened; underlined names open their encyclopedia page.</p>
+          <div id="chronicle" class="chronicle"></div>
+          <p class="hint">The chronicle is edited for reading: the most important lines of each century, and bursts of similar events in one line. Every event is kept in the full record (see the encyclopedia, or the runner's <code>--events</code> export).</p>
+        </section>
+
+        <div class="charts">
+          <figure>
+            <figcaption>World population</figcaption>
+            <div id="chart-population" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Reachable land settled</figcaption>
+            <div id="chart-settled" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Groups (pops)</figcaption>
+            <div id="chart-pops" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Living peoples and languages</figcaption>
+            <div id="chart-peoples" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>People by way of life</figcaption>
+            <div id="chart-modes" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Settlements</figcaption>
+            <div id="chart-settlements" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Realms by tier</figcaption>
+            <div id="chart-polities" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Largest realm's share of all people</figcaption>
+            <div id="chart-largest" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Trade (value a year)</figcaption>
+            <div id="chart-trade" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Reserves left</figcaption>
+            <div id="chart-reserves" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Forests and soil</figcaption>
+            <div id="chart-land" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Prices against usual</figcaption>
+            <div id="chart-prices" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Wars: going on, and begun per century</figcaption>
+            <div id="chart-wars" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Soldiers killed in war per century</figcaption>
+            <div id="chart-war-deaths" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Faiths: how many, and the share of people who follow one</figcaption>
+            <div id="chart-faiths" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>World temperature against normal (°C)</figcaption>
+            <div id="chart-climate" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Killed by plague per century</figcaption>
+            <div id="chart-plague-deaths" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>The race to the end: shares of the world held by the leaders</figcaption>
+            <div id="chart-race" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Great people per century, by kind</figcaption>
+            <div id="chart-great" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Technologies known somewhere</figcaption>
+            <div id="chart-tech" class="chart"></div>
+          </figure>
+        </div>
+
+        <section class="tree-panel" aria-label="Family trees">
+          <div class="tree-header">
+            <h2>Family tree</h2>
+            <div class="tabs" role="tablist">
+              <button id="tab-cultures" type="button" role="tab" aria-selected="true">Peoples</button>
+              <button id="tab-languages" type="button" role="tab" aria-selected="false">Languages</button>
+              <button id="tab-polities" type="button" role="tab" aria-selected="false">Realms</button>
+              <button id="tab-faiths" type="button" role="tab" aria-selected="false">Faiths</button>
+              <button id="tab-houses" type="button" role="tab" aria-selected="false">Houses</button>
+            </div>
+          </div>
+          <p id="tree-hint" class="hint">Time runs left to right; thickness shows how many people. Click a branch for details.</p>
+          <div class="tree-frame"><canvas id="tree"></canvas></div>
+          <div id="lineage" class="lineage"></div>
+        </section>
+
+        <section class="hall-panel" aria-label="Great people">
+          <div class="chronicle-header">
+            <h2>Great people</h2>
+            <div class="filters">
+              <label>Kind <select id="hall-kind"><option value="">All kinds</option></select></label>
+              <label>Era <select id="hall-era"><option value="">All eras</option></select></label>
+              <label>Region <select id="hall-region"><option value="-1">All regions</option></select></label>
+            </div>
+          </div>
+          <p class="hint">Everyone who won fame: prophets, thinkers, inventors, explorers, poets, merchant princes, warlords, great rulers and tyrants, reformers, generals, diplomats. Latest first; names open their encyclopedia page.</p>
+          <div id="hall" class="hall"></div>
+        </section>
+
+        <section class="tech-panel" aria-label="Technology web">
+          <h2>Technology web</h2>
+          <p class="hint">Every technology, by age. The bar shows the share of all people who know it; dashed cards haven't been invented yet, struck-out ones are lost.</p>
+          <div id="tech-web" class="tech-web"></div>
+          <div id="tech-details" class="tech-details"></div>
+        </section>
+      </section>
+
+      <aside class="side-panel">
+        <section class="clock" aria-live="polite">
+          <p class="clock-label">Year</p>
+          <p id="year" class="clock-year">0</p>
+          <p id="status" class="clock-status">Paused</p>
+          <p id="people-summary" class="clock-people"></p>
+        </section>
+
+        <section class="controls" aria-label="Simulation controls">
+          <div class="row">
+            <button id="play" type="button" class="primary">Play</button>
+            <button id="step" type="button">+1 year</button>
+            <label>Speed
+              <select id="speed">
+                <option value="1">1 year/s</option>
+                <option value="10" selected>10 years/s</option>
+                <option value="100">100 years/s</option>
+                <option value="1000">1,000 years/s</option>
+                <option value="max">As fast as possible</option>
+              </select>
+            </label>
+          </div>
+          <div class="row">
+            <label>Seed <input id="seed" type="number" value="1" step="1" inputmode="numeric" /></label>
+            <label>World <select id="shape"></select></label>
+            <button id="restart" type="button">New world</button>
+          </div>
+          <div class="row">
+            <label>When the world ends
+              <select id="after-ending">
+                <option value="stop" selected>stop</option>
+                <option value="continue">keep watching</option>
+                <option value="new-world">start a new world</option>
+              </select>
+            </label>
+          </div>
+          <div class="row">
+            <button id="save" type="button">Save world</button>
+            <button id="load" type="button">Load world…</button>
+            <input id="load-file" type="file" accept=".civsnap,.json,application/gzip,application/json" hidden />
+          </div>
+          <div class="row">
+            <button id="branch" type="button">Branch from here</button>
+            <label>with seed <input id="branch-seed" type="number" value="2" step="1" inputmode="numeric" /></label>
+          </div>
+          <p id="branch-note" class="hint">Branching keeps everything so far and gives the future a different seed: the same past, another history.</p>
+          <p id="error" class="error" role="alert" hidden></p>
+        </section>
+
+        <section class="race" aria-label="The race to the end">
+          <h2>The race to the end</h2>
+          <p id="race-note" class="hint"></p>
+          <div id="race"></div>
+        </section>
+
+        <section class="inspector" aria-live="polite">
+          <h2>Tile</h2>
+          <div id="inspector"><p class="hint">Click a tile on the map to see everything about it.</p></div>
+        </section>
+
+        <section class="encyclopedia" aria-label="Encyclopedia">
+          <h2>Encyclopedia</h2>
+          <input id="ency-search" type="search" placeholder="Search peoples, languages, places…" aria-label="Search the encyclopedia" />
+          <ul id="ency-results" class="ency-results"></ul>
+          <div id="ency-page" class="ency-page"></div>
+        </section>
+
+        <p class="fingerprint">World fingerprint: <code id="fingerprint">…</code></p>
+      </aside>
+    </main>
+
+  </body>
+</html>
