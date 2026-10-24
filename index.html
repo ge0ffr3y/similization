@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>CivSim</title>
-    <script type="module" crossorigin src="/similization/assets/index-1zB-i9nC.js"></script>
+    <script type="module" crossorigin src="/similization/assets/index-giU1xL9Z.js"></script>
     <link rel="stylesheet" crossorigin href="/similization/assets/index-Ci_iPuJH.css">
   </head>
   <body>
     <header class="page-header">
       <h1>CivSim</h1>
-      <p>A world history machine. Nobody plays it: pick a seed, press play, and watch history write itself. (Phase 13: every world now ends: in conquest, cultural dominance, religious unity, world peace, extinction, or the time limit. Watch the race to the end below the controls and its chart, try the Cultural influence map mode, and read the epilogue when the world ends. Choose what happens after: stop, keep watching, or start a new world.)</p>
+      <p>A world history machine. Nobody plays it: pick a seed, press play, and watch history write itself. (Phase 16: after the factories come electricity, engines, radio and aircraft, then the atom. Alliance blocs fight world wars and found leagues after them; a few great realms build nuclear weapons, and crises between them usually pass. When one doesn't, cities burn and a nuclear winter follows, and laboratories or a warming climate can bring catastrophe too. Try the Alliance blocs and Nuclear powers map modes and the nuclear weapons chart. Every world still ends: in conquest, cultural dominance, religious unity, world peace, self-annihilation, extinction, or the time limit; watch the race to the end and read the epilogue.)</p>
     </header>
 
     <main class="layout">
@@ -124,7 +124,7 @@
             <div id="chart-faiths" class="chart"></div>
           </figure>
           <figure>
-            <figcaption>World temperature against normal (°C)</figcaption>
+            <figcaption>World temperature against normal (°C; industry's warming and nuclear winters included)</figcaption>
             <div id="chart-climate" class="chart"></div>
           </figure>
           <figure>
@@ -134,6 +134,18 @@
           <figure>
             <figcaption>The race to the end: shares of the world held by the leaders</figcaption>
             <div id="chart-race" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Factory output a year (manufactures)</figcaption>
+            <div id="chart-industry" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Share of people living in towns and cities</figcaption>
+            <div id="chart-urban" class="chart"></div>
+          </figure>
+          <figure>
+            <figcaption>Nuclear weapons in the world</figcaption>
+            <div id="chart-arsenal" class="chart"></div>
           </figure>
           <figure>
             <figcaption>Great people per century, by kind</figcaption>
@@ -207,6 +219,7 @@
           <div class="row">
             <label>Seed <input id="seed" type="number" value="1" step="1" inputmode="numeric" /></label>
             <label>World <select id="shape"></select></label>
+            <label>Size <select id="size"></select></label>
             <button id="restart" type="button">New world</button>
           </div>
           <div class="row">
